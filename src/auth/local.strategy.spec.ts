@@ -3,13 +3,21 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 import { LocalStrategy } from './local.strategy';
+import { JwtModule } from '@nestjs/jwt';
 
 describe('LocalStrategy', () => {
   let strategy: LocalStrategy;
 
   beforeEach(async () => {
+    process.env.JWT_SECRET_KEY = 'secretkey';
     const module: TestingModule = await Test.createTestingModule({
       providers: [LocalStrategy, AuthService, UsersService],
+      imports: [
+        JwtModule.register({
+          secret: 'secretkey',
+          signOptions: { expiresIn: '300s' },
+        }),
+      ],
     }).compile();
 
     strategy = module.get<LocalStrategy>(LocalStrategy);
@@ -45,4 +53,3 @@ describe('LocalStrategy', () => {
     });
   });
 });
-
