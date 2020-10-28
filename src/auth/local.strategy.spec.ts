@@ -24,24 +24,25 @@ describe('LocalStrategy', () => {
       const subject = await strategy.validate('user', 'pass');
       expect(subject).toEqual({
         userId: 1,
-        username: 'user'
+        username: 'user',
       });
     });
 
     it('should throw UnauthorizedException when username doesnt exist', async () => {
-        try {
-            const subject = await strategy.validate('not_user', 'pass');
-        } catch(e) {
-            expect(e).toEqual(new UnauthorizedException());
-        }
+      try {
+        await strategy.validate('not_user', 'pass');
+      } catch (e) {
+        expect(e).toEqual(new UnauthorizedException());
+      }
     });
 
     it('should throw UnauthorizedException when password is not correct', async () => {
-        try {
-            const subject = await strategy.validate('user', 'not_pass');
-        } catch(e) {
-            expect(e).toEqual(new UnauthorizedException());
-        }
+      try {
+        await strategy.validate('user', 'not_pass');
+      } catch (e) {
+        expect(e).toEqual(new UnauthorizedException());
+      }
     });
   });
 });
+

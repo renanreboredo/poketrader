@@ -8,7 +8,7 @@ describe('AuthService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [AuthService],
-      imports: [UsersModule]
+      imports: [UsersModule],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
@@ -23,7 +23,7 @@ describe('AuthService', () => {
       const subject = await service.validateUser('user', 'pass');
       expect(subject).toEqual({
         userId: 1,
-        username: 'user'
+        username: 'user',
       });
     });
 

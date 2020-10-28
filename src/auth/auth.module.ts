@@ -14,9 +14,9 @@ import { JwtModule } from '@nestjs/jwt';
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY,
       signOptions: { expiresIn: '300s' },
-    })
+    }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
-  controllers: [AuthController]
+  controllers: [AuthController],
 })
 export class AuthModule {}

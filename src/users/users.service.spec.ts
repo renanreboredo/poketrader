@@ -22,7 +22,7 @@ describe('UsersService', () => {
       expect(subject).toEqual({
         userId: 1,
         username: 'user',
-        password: 'pass'
+        password: 'pass',
       });
     });
 
