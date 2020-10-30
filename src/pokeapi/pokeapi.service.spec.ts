@@ -43,6 +43,22 @@ describe('PokeapiService', () => {
       const subject = await service.generations();
       expect(subject.length).toBeGreaterThanOrEqual(8);
     });
+
+    it('returns id, name and url from each generation', async () => {
+      jest.spyOn(HttpService.prototype, 'get').mockImplementation(() =>
+        of({
+          data: generations,
+          status: 200,
+          headers: null,
+          config: {},
+          statusText: 'OK',
+        }),
+      );
+      const subject = await service.generations();
+      expect(subject[1].id).toEqual('2');
+      expect(subject[1].name).toEqual('generation-ii');
+      expect(subject[1].url).toEqual('https://pokeapi.co/api/v2/generation/2/');
+    });
   });
 
   describe('#pokemonsFromGeneration', () => {

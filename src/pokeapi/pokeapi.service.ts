@@ -14,7 +14,11 @@ export class PokeapiService {
 
   async generations() {
     const data = await this.pokeapiRequest(`generation`);
-    return data.results;
+    return data.results.map((generation: any) => ({
+      id: generation.url.split('/')[6],
+      name: generation.name,
+      url: generation.url,
+    }));
   }
 
   async pokemonsFromGeneration(id: number): Promise<Pokemon[]> {
