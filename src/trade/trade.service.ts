@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { isEmpty } from 'lodash';
-import { Pokemon } from 'src/domain/Pokemon';
-
-export type Trade = any;
+import { Model } from 'mongoose';
+import { Pokemon } from '../domain/Pokemon';
+import { Trade } from '../domain/Trade';
 
 @Injectable()
 export class TradeService {
+  constructor(
+    @InjectModel('Trade') private readonly tradeModel: Model<Trade>,
+  ) {}
+
   async isFairTrade(
     pokemonsFromPlayer1: Pokemon[],
     pokemonsFromPlayer2: Pokemon[],
@@ -31,6 +36,7 @@ export class TradeService {
   async makeTrade(
     pokemonsFromPlayer1: Pokemon[],
     pokemonsFromPlayer2: Pokemon[],
+    userID: string,
   ) {
     if (pokemonsFromPlayer1.length > 6 || pokemonsFromPlayer2.length > 6) {
       return false;
@@ -42,5 +48,14 @@ export class TradeService {
     if (!isFairTrade) {
       return false;
     }
+
+    const trade = new this.tradeModel({
+      userID,
+      pokemonsIn: pokemonsFromPlayer2,
+      pokemonsOut: pokemonsFromPlayer1,
+      createdOn: new Date(),
+    });
+
+    return await trade.save();
   }
 }
