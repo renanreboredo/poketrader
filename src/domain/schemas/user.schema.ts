@@ -1,6 +1,11 @@
 import { Schema } from 'mongoose';
 
 export const UserSchema = new Schema({
-  username: Schema.Types.String,
-  password: Schema.Types.String,
+  username: {
+    type: Schema.Types.String,
+    required: true,
+    unique: true,
+    dropDups: true,
+  },
+  password: { type: Schema.Types.String, required: true },
 });
