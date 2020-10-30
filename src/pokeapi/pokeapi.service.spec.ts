@@ -128,4 +128,57 @@ describe('PokeapiService', () => {
       }
     });
   });
+
+  describe('#pokeapiRequest', () => {
+    it('calls pokeapi url', async () => {
+      const subject = jest
+        .spyOn(HttpService.prototype, 'get')
+        .mockImplementation(() =>
+          of({
+            data: generations,
+            status: 200,
+            headers: null,
+            config: {},
+            statusText: 'OK',
+          }),
+        );
+      await service.pokeapiRequest(`generation`);
+      expect(subject).toHaveBeenCalledWith(
+        'https://pokeapi.co/api/v2/generation',
+      );
+    });
+
+    it('returns data if record found in pokeapi', async () => {
+      jest.spyOn(HttpService.prototype, 'get').mockImplementation(() =>
+        of({
+          data: generations,
+          status: 200,
+          headers: null,
+          config: {},
+          statusText: 'OK',
+        }),
+      );
+      const subject = await service.pokeapiRequest(`generation`);
+      expect(subject).toEqual(generations);
+    });
+
+    it('throws not found error if record not found in pokeapi', async () => {
+      jest.spyOn(HttpService.prototype, 'get').mockImplementation(() =>
+        of({
+          data: 'Not Found',
+          status: 200,
+          headers: null,
+          config: {},
+          statusText: 'OK',
+        }),
+      );
+      try {
+        await service.pokeapiRequest(`generation`);
+      } catch (subject) {
+        expect(subject).toEqual(
+          new HttpException('Not Found', HttpStatus.NOT_FOUND),
+        );
+      }
+    });
+  });
 });

@@ -47,7 +47,7 @@ export class PokeapiService {
     };
   }
 
-  private async pokeapiRequest(uri: string) {
+  async pokeapiRequest(uri: string) {
     const { data } = await this.http
       .get(`${this.POKEAPI_BASE_URL}/${uri}`)
       .toPromise();
