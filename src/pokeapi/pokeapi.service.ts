@@ -4,6 +4,7 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
+import { Pokemon } from 'src/domain/Pokemon';
 
 @Injectable()
 export class PokeapiService {
@@ -16,7 +17,7 @@ export class PokeapiService {
     return data.results;
   }
 
-  async pokemonsFromGeneration(id: number) {
+  async pokemonsFromGeneration(id: number): Promise<Pokemon[]> {
     const data = await this.pokeapiRequest(`generation/${id}`);
 
     let pokemons = [];
@@ -28,7 +29,7 @@ export class PokeapiService {
     return pokemons;
   }
 
-  async pokemonInfo(name: string) {
+  async pokemonInfo(name: string): Promise<Pokemon> {
     const data = await this.pokeapiRequest(`pokemon/${name}`);
     return {
       name,

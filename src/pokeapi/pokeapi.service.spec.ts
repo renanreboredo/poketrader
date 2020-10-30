@@ -10,7 +10,7 @@ import { of } from 'rxjs';
 import {
   generations,
   pokemonsFromGeneration,
-  pokemonExample,
+  pokemonExampleAPI,
 } from '../../test/mocks/pokeapi';
 
 describe('PokeapiService', () => {
@@ -60,7 +60,7 @@ describe('PokeapiService', () => {
         )
         .mockImplementation(() =>
           of({
-            data: pokemonExample,
+            data: pokemonExampleAPI,
             status: 200,
             headers: null,
             config: {},
@@ -94,7 +94,7 @@ describe('PokeapiService', () => {
     it('consolidates useful pokemon info for trading', async () => {
       jest.spyOn(HttpService.prototype, 'get').mockImplementation(() =>
         of({
-          data: pokemonExample,
+          data: pokemonExampleAPI,
           status: 200,
           headers: null,
           config: {},
