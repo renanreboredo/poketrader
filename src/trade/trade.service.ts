@@ -59,7 +59,7 @@ export class TradeService {
     return await trade.save();
   }
 
-  async getAllTrades(userID: string) {
-    return await this.tradeModel.find({ userID, $orderby: { createdOn: -1 }});
+  async history(userID: string) {
+    return await this.tradeModel.find({ userID }).sort('-createdOn');
   }
 }
