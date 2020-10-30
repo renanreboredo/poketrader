@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { pokemonExample, pokemonExample2 } from '../../test/mocks/pokeapi';
 import { TradeService } from './trade.service';
+import { HttpStatus, HttpException } from '@nestjs/common';
 
 describe('TradeService', () => {
   let service: TradeService;
@@ -17,7 +18,7 @@ describe('TradeService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('#fairTrade', () => {
+  describe('#isFairTrade', () => {
     it('should return false if any pokemon trade array is empty', async () => {
       const subject = await service.isFairTrade([], [pokemonExample]);
       expect(subject).toEqual(false);
@@ -75,6 +76,39 @@ describe('TradeService', () => {
     it('should return 0 if array is empty', () => {
       const subject = service.calculatePlayerTradeScore([]);
       expect(subject).toEqual(0);
+    });
+  });
+
+  describe('#makeTrade', () => {
+    it('should permit trade only if trade is fair', async () => {
+      const subject = await service.makeTrade(
+        [pokemonExample],
+        [pokemonExample2],
+      );
+      expect(subject).toEqual(false);
+    });
+
+    it('should not allow trade if more than 6 pokemons is offered by a player', async () => {
+      const subject = await service.makeTrade(
+        [
+          pokemonExample2,
+          pokemonExample2,
+          pokemonExample2,
+          pokemonExample2,
+          pokemonExample2,
+          pokemonExample2,
+          pokemonExample2,
+        ],
+        [
+          pokemonExample2,
+          pokemonExample2,
+          pokemonExample2,
+          pokemonExample2,
+          pokemonExample2,
+          pokemonExample2,
+        ],
+      );
+      expect(subject).toEqual(false);
     });
   });
 });

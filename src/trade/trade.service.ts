@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { isEmpty } from 'lodash';
 import { Pokemon } from 'src/domain/Pokemon';
 
+export type Trade = any;
+
 @Injectable()
 export class TradeService {
   async isFairTrade(
@@ -24,5 +26,21 @@ export class TradeService {
       (acc: number, pokemon: Pokemon) => acc + pokemon.baseExperience,
       0,
     );
+  }
+
+  async makeTrade(
+    pokemonsFromPlayer1: Pokemon[],
+    pokemonsFromPlayer2: Pokemon[],
+  ) {
+    if (pokemonsFromPlayer1.length > 6 || pokemonsFromPlayer2.length > 6) {
+      return false;
+    }
+    const isFairTrade = await this.isFairTrade(
+      pokemonsFromPlayer1,
+      pokemonsFromPlayer2,
+    );
+    if (!isFairTrade) {
+      return false;
+    }
   }
 }
