@@ -1,16 +1,41 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
-import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
+import { UsersService } from '../users/users.service';
+import { getModelToken } from '@nestjs/mongoose';
 
 describe('AuthService', () => {
   let service: AuthService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AuthService],
+      providers: [
+        AuthService,
+        UsersService,
+        {
+          provide: getModelToken('User'),
+          useValue: {
+            new: jest.fn(),
+            constructor: jest.fn(),
+            find: jest.fn(),
+            findOne: jest.fn().mockImplementation((query) => {
+              if (query.username === 'user') {
+                return {
+                  userId: 1,
+                  username: 'user',
+                  password: 'pass',
+                };
+              }
+              return undefined;
+            }),
+            update: jest.fn(),
+            create: jest.fn(),
+            remove: jest.fn(),
+            exec: jest.fn(),
+          },
+        },
+      ],
       imports: [
-        UsersModule,
         JwtModule.register({
           secret: 'secretkey',
           signOptions: { expiresIn: '300s' },

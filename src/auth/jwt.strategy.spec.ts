@@ -4,6 +4,7 @@ import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
+import { getModelToken } from '@nestjs/mongoose';
 
 describe('JwtStrategy', () => {
   let strategy: JwtStrategy;
@@ -11,7 +12,33 @@ describe('JwtStrategy', () => {
   beforeEach(async () => {
     process.env.JWT_SECRET_KEY = 'secretkey';
     const module: TestingModule = await Test.createTestingModule({
-      providers: [JwtStrategy, AuthService, UsersService],
+      providers: [
+        JwtStrategy,
+        AuthService,
+        UsersService,
+        {
+          provide: getModelToken('User'),
+          useValue: {
+            new: jest.fn(),
+            constructor: jest.fn(),
+            find: jest.fn(),
+            findOne: jest.fn().mockImplementation((query) => {
+              if (query.username === 'user') {
+                return {
+                  userId: 1,
+                  username: 'user',
+                  password: 'pass',
+                };
+              }
+              return undefined;
+            }),
+            update: jest.fn(),
+            create: jest.fn(),
+            remove: jest.fn(),
+            exec: jest.fn(),
+          },
+        },
+      ],
       imports: [
         JwtModule.register({
           secret: 'secretkey',

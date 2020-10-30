@@ -1,14 +1,29 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { pokemonExample, pokemonExample2 } from '../../test/mocks/pokeapi';
 import { TradeService } from './trade.service';
-import { HttpStatus, HttpException } from '@nestjs/common';
+import { getModelToken } from '@nestjs/mongoose';
 
 describe('TradeService', () => {
   let service: TradeService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [TradeService],
+      providers: [
+        TradeService,
+        {
+          provide: getModelToken('Trade'),
+          useValue: {
+            new: jest.fn(),
+            constructor: jest.fn(),
+            find: jest.fn(),
+            findOne: jest.fn(),
+            update: jest.fn(),
+            create: jest.fn(),
+            remove: jest.fn(),
+            exec: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     service = module.get<TradeService>(TradeService);
@@ -84,6 +99,7 @@ describe('TradeService', () => {
       const subject = await service.makeTrade(
         [pokemonExample],
         [pokemonExample2],
+        'user',
       );
       expect(subject).toEqual(false);
     });
@@ -107,6 +123,7 @@ describe('TradeService', () => {
           pokemonExample2,
           pokemonExample2,
         ],
+        'user',
       );
       expect(subject).toEqual(false);
     });
