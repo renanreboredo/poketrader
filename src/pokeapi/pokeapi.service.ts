@@ -27,29 +27,35 @@ export class PokeapiService {
     let pokemons = [];
     for (const pokemon of data.pokemon_species) {
       const aux = await this.pokemonInfo(pokemon.name);
-      pokemons = [...pokemons, aux];
+      if (aux) {
+        pokemons = [...pokemons, aux];
+      }
     }
 
     return pokemons.sort((a, b) => a.id - b.id);
   }
 
   async pokemonInfo(name: string): Promise<Pokemon> {
-    const data = await this.pokeapiRequest(`pokemon/${name}`);
-    return {
-      id: data.id,
-      name,
-      isDefault: data.is_default,
-      baseExperience: data.base_experience,
-      sprite: data.sprites.front_default,
-      stats: {
-        hp: data.stats[0].base_stat,
-        attack: data.stats[1].base_stat,
-        defense: data.stats[2].base_stat,
-        specialAttack: data.stats[3].base_stat,
-        specialDefense: data.stats[4].base_stat,
-        speed: data.stats[5].base_stat,
-      },
-    };
+    try {
+      const data = await this.pokeapiRequest(`pokemon/${name}`);
+      return {
+        id: data.id,
+        name,
+        isDefault: data.is_default,
+        baseExperience: data.base_experience,
+        sprite: data.sprites.front_default,
+        stats: {
+          hp: data.stats[0].base_stat,
+          attack: data.stats[1].base_stat,
+          defense: data.stats[2].base_stat,
+          specialAttack: data.stats[3].base_stat,
+          specialDefense: data.stats[4].base_stat,
+          speed: data.stats[5].base_stat,
+        },
+      };
+    } catch (e) {
+      return undefined;
+    }
   }
 
   async pokeapiRequest(uri: string) {

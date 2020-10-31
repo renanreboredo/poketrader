@@ -104,6 +104,41 @@ describe('PokeapiService', () => {
         expect(e).toEqual(new HttpException('Not Found', HttpStatus.NOT_FOUND));
       }
     });
+
+    it('ignores pokemon if its not found', async () => {
+      jest
+        .spyOn(HttpService.prototype, 'get')
+        .mockImplementationOnce(() =>
+          of({
+            data: pokemonsFromGeneration,
+            status: 200,
+            headers: null,
+            config: {},
+            statusText: 'OK',
+          }),
+        )
+        .mockImplementationOnce(() =>
+          of({
+            data: 'Not Found',
+            status: 200,
+            headers: null,
+            config: {},
+            statusText: 'OK',
+          }),
+        )
+        .mockImplementation(() =>
+          of({
+            data: pokemonExampleAPI,
+            status: 200,
+            headers: null,
+            config: {},
+            statusText: 'OK',
+          }),
+        );
+
+      const subject = await service.pokemonsFromGeneration(1);
+      expect(subject.length).toEqual(150);
+    });
   });
 
   describe('#pokemonInfo', () => {
