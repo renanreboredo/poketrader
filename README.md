@@ -28,3 +28,15 @@ ferramenta, mas sim como você a utiliza.
 confortável. Na bx a maior parte da nossa stack é Ruby on Rails, React.js e MongoDB. Mas
 isso não deve guiar seu exercício. Pois, caso não tenha familiaridade com a plataforma,
 teremos espaço para seu aprendizado e desenvolvimento durante o trabalho.
+
+# Solução
+
+## Rodando o projeto
+
+Para poder rodar a aplicação, é necessário ter o nodejs e o npm instalados na máquina.
+
+Para rodar a aplicação basta rodar o comando:
+
+```sh
+DATABASE_PASSWORD=root JWT_SECRET_KEY=<SECRET_KEY_PARA_GERAR_JWTs_UNICOS> npm run start:dev
+```
