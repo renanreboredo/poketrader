@@ -15,7 +15,7 @@ import { LocalAuthGuard } from './local-auth-guard';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY,
-      signOptions: { expiresIn: '300s' },
+      signOptions: { expiresIn: '86400s' },
     }),
   ],
   providers: [
