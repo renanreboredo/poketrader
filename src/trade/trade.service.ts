@@ -39,14 +39,20 @@ export class TradeService {
     userID: string,
   ) {
     if (pokemonsFromPlayer1.length > 6 || pokemonsFromPlayer2.length > 6) {
-      return false;
+      return {
+        error: true,
+        message: 'Trade must have 6 pokemons maximum'
+      };
     }
     const isFairTrade = await this.isFairTrade(
       pokemonsFromPlayer1,
       pokemonsFromPlayer2,
     );
     if (!isFairTrade) {
-      return false;
+      return {
+        error: true,
+        message: 'Trade must be fair'
+      };
     }
 
     const trade = new this.tradeModel({
@@ -60,6 +66,13 @@ export class TradeService {
   }
 
   async history(userID: string) {
-    return await this.tradeModel.find({ userID }).sort('-createdOn');
+    const tradeHistory = await this.tradeModel.find({ userID }).sort('-createdOn');
+    if (isEmpty(tradeHistory)) {
+      return {
+        error: true,
+        message: 'No trade history for this user'
+      }
+    }
+    return tradeHistory;
   }
 }

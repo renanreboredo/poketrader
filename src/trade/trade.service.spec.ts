@@ -96,16 +96,16 @@ describe('TradeService', () => {
 
   describe('#makeTrade', () => {
     it('should permit trade only if trade is fair', async () => {
-      const subject = await service.makeTrade(
+      const subject: any = await service.makeTrade(
         [pokemonExample],
         [pokemonExample2],
         'user',
       );
-      expect(subject).toEqual(false);
+      expect(subject.error).toEqual(true);
     });
 
     it('should not allow trade if more than 6 pokemons is offered by a player', async () => {
-      const subject = await service.makeTrade(
+      const subject: any = await service.makeTrade(
         [
           pokemonExample2,
           pokemonExample2,
@@ -125,7 +125,7 @@ describe('TradeService', () => {
         ],
         'user',
       );
-      expect(subject).toEqual(false);
+      expect(subject.error).toEqual(true);
     });
   });
 });

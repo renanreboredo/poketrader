@@ -3,7 +3,6 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { User } from '../domain/User';
-import { of } from 'rxjs';
 
 describe('Users Controller', () => {
   let controller: UsersController;
