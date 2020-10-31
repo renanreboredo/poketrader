@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { PokeapiService } from '../pokeapi/pokeapi.service';
 import { TradeService } from './trade.service';
 import { Pokemon } from 'src/domain/Pokemon';
+import { JwtAuthGuard } from 'src/auth/jwt-auth-guard';
 
 @Controller('trade')
 export class TradeController {
@@ -10,6 +11,7 @@ export class TradeController {
     private tradeService: TradeService,
   ) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get('generation')
   async generations() {
     const data = await this.pokeapiService.generations();
@@ -19,6 +21,7 @@ export class TradeController {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('generation/:id/pokemon')
   async pokemonsFromGeneration(@Param('id') id: number) {
     const data = await this.pokeapiService.pokemonsFromGeneration(id);
@@ -28,6 +31,7 @@ export class TradeController {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('fair')
   async isFairTrade(
     @Body('pokemonsFromPlayer1') pokemonsFromPlayer1: Pokemon[],
@@ -43,6 +47,7 @@ export class TradeController {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   async trade(
     @Body('pokemonsFromPlayer1') pokemonsFromPlayer1: Pokemon[],
@@ -60,6 +65,7 @@ export class TradeController {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':userID')
   async tradeHistory(@Param('userID') userID: string) {
     const data = await this.tradeService.history(userID);
