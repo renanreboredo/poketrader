@@ -30,12 +30,13 @@ export class PokeapiService {
       pokemons = [...pokemons, aux];
     }
 
-    return pokemons;
+    return pokemons.sort((a, b) => a.id - b.id);
   }
 
   async pokemonInfo(name: string): Promise<Pokemon> {
     const data = await this.pokeapiRequest(`pokemon/${name}`);
     return {
+      id: data.id,
       name,
       isDefault: data.is_default,
       baseExperience: data.base_experience,
